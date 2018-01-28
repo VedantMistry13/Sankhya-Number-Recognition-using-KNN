@@ -4,7 +4,6 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -13,6 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.versus.sankhya.asynctasks.ClassifyBitmapAsyncTask;
+import com.versus.sankhya.models.DataModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 = new ClassifyBitmapAsyncTask(
                     in,
                     this.dataModelArrayList,
-                    (TextView) findViewById(R.id.predicted_number)
+                    this.textView
                 );
         classifyBitmapAsyncTask.execute();
     }
@@ -152,80 +154,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 }
 
-class IndicesAndDistance {
-    int number;
-    double distance;
-}
 
-class DataModel {
-    int number;
-    byte[] bytes;
-}
 
-class ClassifyBitmapAsyncTask extends AsyncTask<Void, Bitmap, Integer> {
-    private byte[] in;
-    private ArrayList<DataModel> dataModelArrayList;
-    private TextView textView;
 
-    ClassifyBitmapAsyncTask(byte[] in, ArrayList<DataModel> dataModelArrayList, TextView textView) {
-        super();
-        this.in = in;
-        this.dataModelArrayList = dataModelArrayList;
-        this.textView = textView;
-    }
-
-    @Override
-    protected Integer doInBackground(Void... params) {
-        int[] count = new int[10];
-        IndicesAndDistance[] indicesAndDistancesArray
-                = new IndicesAndDistance[dataModelArrayList.size()];
-
-        for (int i = 0; i < this.dataModelArrayList.size(); i++) {
-            DataModel dataModel = dataModelArrayList.get(i);
-            int distance = 0;
-            for (int j = 0; j < 1024; j++) {
-                distance += Math.abs(in[j] - dataModel.bytes[j]);
-            }
-            indicesAndDistancesArray[i] = new IndicesAndDistance();
-            indicesAndDistancesArray[i].number = dataModel.number;
-            indicesAndDistancesArray[i].distance = distance;
-        }
-
-        for (int i = 0; i < dataModelArrayList.size(); i++) {
-            for (int j = 0; j < dataModelArrayList.size(); j++) {
-                if (indicesAndDistancesArray[i].distance < indicesAndDistancesArray[j].distance) {
-                    IndicesAndDistance temp = indicesAndDistancesArray[i];
-                    indicesAndDistancesArray[i] = indicesAndDistancesArray[j];
-                    indicesAndDistancesArray[j] = temp;
-                }
-            }
-        }
-
-        for (int i = 0; i < count.length; i++) {
-            count[i] = 0;
-        }
-        for (int i = 0; i < count.length; i++) {
-            IndicesAndDistance indicesAndDistance = indicesAndDistancesArray[i];
-            count[indicesAndDistance.number] += 1;
-        }
-
-        int max = count[0], maxNumber = 0;
-        for (int i = 1; i < count.length; i++) {
-            if (max < count[i]) {
-                maxNumber = i;
-                max = count[i];
-            }
-        }
-
-        return maxNumber;
-    }
-
-    @Override
-    protected void onPostExecute(Integer predictedNumber) {
-        super.onPostExecute(predictedNumber);
-        Log.d("MainActivity", predictedNumber + "");
-        if (this.textView != null) {
-            this.textView.setText(predictedNumber + "");
-        }
-    }
-}
