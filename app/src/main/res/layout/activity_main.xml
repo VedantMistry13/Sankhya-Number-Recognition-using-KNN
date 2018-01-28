@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context="com.versus.sankhya.MainActivity">
+
+    <com.versus.sankhya.CanvasView
+        android:id="@+id/canvas"
+        android:background="#ffffff"
+        android:layout_centerInParent="true"
+        android:layout_height="200dp"
+        android:layout_width="200dp" />
+
+    <ImageView
+        android:id="@+id/bitmap_drawn"
+        android:contentDescription="@string/bitmap_drawn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="@string/_0"
+        android:textSize="25sp"
+        android:fontFamily="monospace"
+        android:textColor="#FFFFFF"
+        android:id="@+id/predicted_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/canvas"
+        android:layout_marginBottom="50dp"
+        tools:targetApi="jelly_bean" />
+
+    <Button
+        android:id="@+id/clear_canvas"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="#ff0000"
+        android:textColor="#FFFFFF"
+        android:text="@string/clear"/>
+
+</RelativeLayout>
