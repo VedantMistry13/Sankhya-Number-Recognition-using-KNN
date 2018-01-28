@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/colorPrimary"
     tools:context="com.versus.sankhya.MainActivity">
 
     <com.versus.sankhya.CanvasView
@@ -37,7 +37,7 @@
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="#ff0000"
+        android:background="#D50000"
         android:textColor="#FFFFFF"
         android:text="@string/clear"/>
 
